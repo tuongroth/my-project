@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { getContacts } from './api';
+import ContactForm from './components/ContactForm';
+import ContactList from './components/ContactList';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await getContacts();
+        setContacts(response.data);
+      } catch (err) {
+        console.error('Error fetching contacts:', err);
+      }
+    };
+    fetchContacts();
+  }, []);
+
+  const handleContactAdded = (newContact) => {
+    setContacts([...contacts, newContact]);
+  };
+
+  const handleContactDeleted = (contactId) => {
+    setContacts(contacts.filter(contact => contact._id !== contactId));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Contact Management</h1>
+      <ContactForm onContactAdded={handleContactAdded} />
+      <ContactList contacts={contacts} onDelete={handleContactDeleted} />
+    </div>
+  );
+};
 
-export default App
+export default App;
