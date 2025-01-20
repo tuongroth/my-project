@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface Contact {
+  _id: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
 }
 
-export default App
+const App: React.FC = () => {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+
+  // Lấy danh sách liên hệ
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const response = await axios.get('http://localhost:5000/api/contacts');
+      setContacts(response.data);
+    };
+    fetchContacts();
+  }, []);
+
+  // Thêm liên hệ mới
+  const handleAddContact = async (newContact: Contact) => {
+    await axios.post('http://localhost:5000/api/contacts', newContact);
+    setContacts([...contacts, newContact]);
+  };
+
+  return (
+    <div>
+      <h1>Contact Management</h1>
+      <ul>
+        {contacts.map(contact => (
+          <li key={contact._id}>{contact.name} - {contact.phone} - {contact.email}</li>
+        ))}
+      </ul>
+      <button onClick={() => handleAddContact({
+        _id: '', name: 'New Contact', phone: '123456789', email: 'new@example.com', address: 'Somewhere'
+      })}>
+        Add New Contact
+      </button>
+    </div>
+  );
+};
+
+export default App;
+
