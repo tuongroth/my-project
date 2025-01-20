@@ -1,0 +1,3 @@
+curl -X PUT http://localhost:5000/api/contacts/60c72b2f9b1d8e0d99d3a56c \
+-H "Content-Type: application/json" \
+-d '{"name": "John Smith", "phone": "987654321", "email": "johnsmith@example.com", "address": "456 Main St"}'
