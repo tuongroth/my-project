@@ -1,3 +1,1 @@
-curl -X POST http://localhost:5000/api/contacts \
--H "Content-Type: application/json" \
--d '{"name": "New Contact", "phone": "111222333", "email": "newcontact@example.com", "address": "123 New Street"}'
+curl -X DELETE http://localhost:5000/api/contacts/63c9a124e8b6e851a3456791
