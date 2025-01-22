@@ -1,61 +1,46 @@
+// src/components/ContactForm.js
 import React, { useState } from 'react';
-import { addContact } from '../api';
 
-const ContactForm = ({ onContactAdded }) => {
+const ContactForm = ({ onAddContact }) => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const contact = { name, phone, email, address };
-
-    try {
-      const response = await addContact(contact);
-      onContactAdded(response.data); // Notify parent component
+    if (name && email && phone) {
+      onAddContact({ name, email, phone });
       setName('');
-      setPhone('');
       setEmail('');
-      setAddress('');
-    } catch (err) {
-      console.error('Error adding contact:', err);
+      setPhone('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        placeholder="Name" 
-        value={name} 
-        onChange={(e) => setName(e.target.value)} 
-        required 
-      />
-      <input 
-        type="text" 
-        placeholder="Phone" 
-        value={phone} 
-        onChange={(e) => setPhone(e.target.value)} 
-        required 
-      />
-      <input 
-        type="email" 
-        placeholder="Email" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-        required 
-      />
-      <input 
-        type="text" 
-        placeholder="Address" 
-        value={address} 
-        onChange={(e) => setAddress(e.target.value)} 
-        required 
-      />
-      <button type="submit">Add Contact</button>
-    </form>
+    <div>
+      <h2>Add New Contact</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <button type="submit">Add Contact</button>
+      </form>
+    </div>
   );
 };
 
