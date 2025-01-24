@@ -1,6 +1,25 @@
-- name: Send success notification to Discord
-  if: success()
-  uses: some/discord-webhook-action@v1
-  with:
-    webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-    message: "Deployment successful: ${{ github.sha }}"
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Send success notification to Discord
+        if: success()  # Đặt điều kiện "nếu thành công" sau khi các bước trước
+        uses: some/discord-webhook-action@v1  # Dùng Discord webhook action
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "Deployment successful: ${{ github.sha }}"
+
+      - name: Build and Deploy
+        run: |
+          echo "Building and deploying..."
