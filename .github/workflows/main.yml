@@ -1,4 +1,62 @@
+name: CI/CD Pipeline
+
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Cài đặt Node.js cho backend và frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Cài đặt và kiểm tra backend
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: npm test
+
+      # Cài đặt và kiểm tra frontend
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Triển khai backend (giả sử bạn dùng Heroku hoặc Fly.io)
+      - name: Deploy Backend
+        run: |
+          echo "Deploying Backend..."
+          # Lệnh deploy thực tế của bạn (Heroku, AWS, v.v.)
+
+      # Triển khai frontend (giả sử bạn dùng Netlify hoặc Vercel)
+      - name: Deploy Frontend
+        run: |
+          echo "Deploying Frontend..."
+          # Lệnh deploy thực tế của bạn (Netlify, Vercel)
