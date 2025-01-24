@@ -1,15 +1,32 @@
+// .env should be loaded as the very first thing
 require('dotenv').config();
+
+// Import các thư viện và module cần thiết
 const express = require('express');
 const connectDB = require('./config/db');
 const contactRoutes = require('./routes/contactRoutes');
+const userRoutes = require('./routes/userRoutes'); // Import user routes
 const errorHandler = require('./middleware/errorHandler');
+const authMiddleware = require('./middleware/authMiddleware'); // Middleware for protected routes
 
+// Tạo đối tượng Express app
 const app = express();
+
+// Middleware để parse JSON request body
 app.use(express.json());
 
-app.use('/api/contacts', contactRoutes);
+// Kết nối với cơ sở dữ liệu MongoDB
+connectDB();
+
+// Định nghĩa các route API
+app.use('/api/contacts', authMiddleware, contactRoutes); // Protect contact routes
+app.use('/api/users', userRoutes); // Use user routes
+
+// Xử lý lỗi toàn cục
 app.use(errorHandler);
 
-connectDB();
+// Lắng nghe yêu cầu từ client
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
