@@ -21,8 +21,7 @@ jobs:
           # Replace the following line with your actual build command
           npm install && npm run build
 
-    # Notify on success and failure
-    post:
+      # Notify on success
       - name: Send success notification to Discord
         if: ${{ success() }}
         uses: Ilshidur/discord-webhook@v2.17.0
@@ -35,6 +34,7 @@ jobs:
             - Commit: `${{ github.sha }}`
             - Branch: `${{ github.ref_name }}`
 
+      # Notify on failure
       - name: Send failure notification to Discord
         if: ${{ failure() }}
         uses: Ilshidur/discord-webhook@v2.17.0
