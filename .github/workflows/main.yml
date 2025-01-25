@@ -3,38 +3,41 @@ name: CI/CD Notifications
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you are monitoring
+      - main  # Theo dõi nhánh chính
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    
-      # Notify on success
-      - name: Send success notification to Discord
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Simulate Build
+        run: |
+          echo "Building..."
+          # Thay dòng này bằng lệnh thực tế
+          npm install && npm run build
+
+      - name: Notify Success
         if: ${{ success() }}
-        uses: baptistelebail/discord-webhook@v1.0.1
+        uses: Tetrax-10/discord-webhook@v2.1
         with:
-          url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          content: |
-            ✅ **Build Success**
-            A new version has been deployed! 🎉
+          webhook-url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          message: |
+            ✅ Build Success:
             - Commit: `${{ github.sha }}`
             - Branch: `${{ github.ref_name }}`
 
-      # Notify on failure
-      - name: Send failure notification to Discord
+      - name: Notify Failure
         if: ${{ failure() }}
-        uses: baptistelebail/discord-webhook@v1.0.1
+        uses: Tetrax-10/discord-webhook@v2.1
         with:
-          url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          content: |
-            ❌ **Build Failed**
-            The build process encountered an error. 😞
+          webhook-url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          message: |
+            ❌ Build Failed:
             - Commit: `${{ github.sha }}`
             - Author: `${{ github.actor }}`
             - Commit Message: `${{ github.event.head_commit.message }}`
-            - Branch: `${{ github.ref_name }}`
-            Please investigate this issue.
+
 
