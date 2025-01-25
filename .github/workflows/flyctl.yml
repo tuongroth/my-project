@@ -1,31 +1,16 @@
-name: Deploy to Fly.io
-
-on:
-  push:
-    branches:
-      - main  # Kích hoạt workflow khi có push lên nhánh main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: npm install
-
-      # Đã bỏ bước build nếu không cần thiết
-      # - name: Build the application
-      #   run: npm run build
-
-      - name: Deploy to Fly.io
+        
+      - name: Install Flyctl
+        run: curl -L https://fly.io/install.sh | sh
+        
+      - name: Authenticate with Fly.io
         run: |
-          flyctl auth token fo1_COPP8y7sXWlg-5Wt9ETy0SfVdXJt-j4zEoN9IQjnG1M  # Token trực tiếp
-          flyctl deploy  # Triển khai ứng dụng lên Fly.io
+          echo "${{ secrets.FLY_API_TOKEN }}" | flyctl auth token
+        
+      - name: Deploy to Fly.io
+        run: flyctl deploy
