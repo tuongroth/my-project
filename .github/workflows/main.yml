@@ -1,35 +1,51 @@
-name: Deploy Application
+name: CI/CD Notifications
 
 on:
   push:
     branches:
-      - main  # hoặc branch mà bạn muốn trigger workflow
+      - main  # Adjust this to the branch you are monitoring
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Thêm bước Deploy của bạn tại đây
-      # ...
+      # Run the build step
+      - name: Build the application
+        run: |
+          echo "Simulating build process..."
+          # Replace the following line with your actual build command
+          npm install && npm run build
 
-      - name: Deploy and notify success
-        if: success()  # Kiểm tra nếu bước deploy thành công
-        uses: some/discord-webhook-action@v1
+    # Notify on success and failure
+    post:
+      - name: Send success notification to Discord
+        if: ${{ success() }}
+        uses: Ilshidur/discord-webhook@v2.17.0
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: "Deployment successful: ${{ github.sha }}"
-
-      - name: Deploy and notify failure
-        if: failure()  # Kiểm tra nếu có lỗi trong deploy
-        uses: some/discord-webhook-action@v1
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          webhook: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          username: 'CI/CD Bot'
           message: |
-            Deployment failed: ${{ github.sha }}
-            Error: ${{ job.status }}
-            Commit: ${{ github.sha }}
-            Details: ${{ github.event.head_commit.message }}
+            ✅ **Build Success**
+            A new version has been deployed! 🎉
+            - Commit: `${{ github.sha }}`
+            - Branch: `${{ github.ref_name }}`
+
+      - name: Send failure notification to Discord
+        if: ${{ failure() }}
+        uses: Ilshidur/discord-webhook@v2.17.0
+        with:
+          webhook: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          username: 'CI/CD Bot'
+          message: |
+            ❌ **Build Failed**
+            The build process encountered an error. 😞
+            - Commit: `${{ github.sha }}`
+            - Author: `${{ github.actor }}`
+            - Commit Message: `${{ github.event.head_commit.message }}`
+            - Branch: `${{ github.ref_name }}`
+            Please investigate this issue.
