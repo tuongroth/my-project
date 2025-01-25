@@ -1,0 +1,32 @@
+name: Periodic Health Check
+
+# Trigger workflow periodically, once per day (every 24 hours)
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  schedule:
+    - cron: '0 0 * * *'  # Runs every day at midnight UTC
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Ping the deployed application to check health
+        uses: actions/http-client@v1
+        with:
+          url: 'https://your-app-url.fly.dev'  # Thay thế URL của ứng dụng
+          method: 'GET'
+      
+      - name: Check the status code
+        run: |
+          if [ "$(curl -s -o /dev/null -w '%{http_code}' https://your-app-url.fly.dev)" != "200" ]; then
+            echo "Health check failed: Application is down"
+            exit 1
+          else
+            echo "Health check passed: Application is up"
+          fi
