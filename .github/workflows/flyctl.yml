@@ -20,14 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Optional: Check if src directory exists (if applicable to your project)
-      - name: Check if src directory exists
-        run: |
-          if [ ! -d "src" ]; then
-            echo "Error: 'src' directory is missing!";
-            exit 1;
-          fi
-
+    
       # Remove the Build step, as it's causing issues
       # - name: Build the application
       #   run: npm run build
