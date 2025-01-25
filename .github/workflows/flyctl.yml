@@ -1,30 +1,40 @@
-name: Deploy to Fly.io
+name: Build Notification
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  deploy:
+  notify-build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16' # specify the Node.js version
+      - name: Run build
+        run: |
+          echo "Running build process..."
+          # Giả định build sẽ luôn thành công
+          # Bạn có thể thay bằng lệnh thực tế (npm build, etc.)
 
-      - name: Install dependencies
-        run: npm install
+      - name: Send success notification to Discord
+        if: ${{ success() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"🎉 Build succeeded! Deployed commit: \`${{ github.sha }}\` from branch: \`${{ github.ref_name }}\`\"}" \
+          $DISCORD_WEBHOOK
 
-      - name: Build production
-        run: npm run build
+      - name: Send failure notification to Discord
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"❌ Build failed! Commit: \`${{ github.sha }}\` from branch: \`${{ github.ref_name }}\`. Check logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          $DISCORD_WEBHOOK
 
-      - name: Fly.io Deploy
-        uses: superfly/flyctl-action@v1
-        with:
-          fly_token: ${{ secrets.FLY_API_TOKEN }}
