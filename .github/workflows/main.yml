@@ -1,21 +1,19 @@
-name: Periodic Health Check
+name: Hello World Workflow
 
 on:
-  # Schedule the health check to run daily
-  schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight UTC
-  # You can trigger it manually to test the workflow
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # Triggers workflow when pushing to main
+  workflow_dispatch: # Allows manual triggering from GitHub Actions
 
 jobs:
-  health-check:
+  hello-world:
     runs-on: ubuntu-latest
 
     steps:
-      # Use url-health-check to ping the server
-      - name: Health Check
-        uses: yskaksk/url-health-check@v1.0.3
-        with:
-          urls: 'https://github.com/tuongroth/my-project/health' # Replace with your application's health endpoint
-          status-codes: '200'
-          timeout: 5 # Maximum time to wait for a response in seconds
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Say Hello
+        run: echo "Hello World!"
+
