@@ -1,3 +1,10 @@
+name: Deploy to Fly.io
+
+on:
+  push:
+    branches:
+      - main  # Sự kiện sẽ kích hoạt workflow khi có push lên nhánh main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,5 +25,5 @@ jobs:
 
       - name: Deploy to Fly.io
         run: |
-          flyctl auth token fo1_COPP8y7sXWlg-5Wt9ETy0SfVdXJt-j4zEoN9IQjnG1M  # Thêm token trực tiếp
+          flyctl auth token fo1_COPP8y7sXWlg-5Wt9ETy0SfVdXJt-j4zEoN9IQjnG1M  # Token trực tiếp
           flyctl deploy  # Triển khai ứng dụng lên Fly.io
