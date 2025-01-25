@@ -1,22 +1,21 @@
-name: CI/CD Notifications
+name: Periodic Health Check
 
 on:
-  push:
-    branches:
-      - main  # Theo dõi nhánh chính
+  # Schedule the health check to run daily
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  # You can trigger it manually to test the workflow
+  workflow_dispatch:
 
 jobs:
-  build:
+  health-check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Simulate Build
-        run: |
-          echo "Building..."
-          # Thay dòng này bằng lệnh thực tế
-          npm install && npm run build
-
-      
+      # Use url-health-check to ping the server
+      - name: Health Check
+        uses: yskaksk/url-health-check@v1.0.3
+        with:
+          urls: 'https://github.com/tuongroth/my-project/health' # Replace with your application's health endpoint
+          status-codes: '200'
+          timeout: 5 # Maximum time to wait for a response in seconds
