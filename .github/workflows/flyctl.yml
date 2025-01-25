@@ -1,0 +1,22 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the application
+        run: npm run build
+
+      - name: Deploy to Fly.io
+        run: |
+          flyctl auth token fo1_COPP8y7sXWlg-5Wt9ETy0SfVdXJt-j4zEoN9IQjnG1M  # Thêm token trực tiếp
+          flyctl deploy  # Triển khai ứng dụng lên Fly.io
