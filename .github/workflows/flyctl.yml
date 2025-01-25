@@ -9,15 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the application
-        run: npm run build
-
       - name: Deploy to Fly.io
         env:
           FLY_API_TOKEN: "FlyV1 fm2_lJPECAAAAAAAAtZjxBCeD3koC1O+mmR/Sb783VmHwrVodHRwczovL2FwaS5mbHkuaW8vdjGWAJLOAAvojR8Lk7lodHRwczovL2FwaS5mbHkuaW8vYWFhL3YxxDxzUwOwmvSw4uANhWRH0DZKkqol8A+9oxzxCHGjS+jgJuGJDBPr+BIH3Ai0y8GSpjYhLtD2z7wZ/5i+jlbETm/NUv8PjyJIQGOXX5dKKCdSfHX3s6Z4v2J6Gt+/+L1IewpRllH34v7t0mLNafBXFa8sQr+u+DGtl7/+iEQNQUZwYCiRw9gcjnJJhdwkZgCSzgAL6I0BxCC8jMFu6ZTup2azQlO6sddWcsvTWgU49sAP/g1l+V41RA==,fm2_lJPETm/NUv8PjyJIQGOXX5dKKCdSfHX3s6Z4v2J6Gt+/+L1IewpRllH34v7t0mLNafBXFa8sQr+u+DGtl7/+iEQNQUZwYCiRw9gcjnJJhdwkZsQQAjIZBr1S9q22z1DYYLbr9cO5aHR0cHM6Ly9hcGkuZmx5LmlvL2FhYS92MZgEks5nlM78zo0s1RoXzgALkyIKkc4AC5MiDMQQ/snr5kljQfDoabnqoyVw/cQgnGs/5Rq/I6HRkJjGuy/0Q2B1adaAoIHj45wrrWnUd3o="  # Token trực tiếp
