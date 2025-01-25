@@ -19,25 +19,4 @@ jobs:
           # Thay dòng này bằng lệnh thực tế
           npm install && npm run build
 
-      - name: Notify Success
-        if: ${{ success() }}
-        uses: Tetrax-10/discord-webhook@v2.1
-        with:
-          webhook-url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          message: |
-            ✅ Build Success:
-            - Commit: `${{ github.sha }}`
-            - Branch: `${{ github.ref_name }}`
-
-      - name: Notify Failure
-        if: ${{ failure() }}
-        uses: Tetrax-10/discord-webhook@v2.1
-        with:
-          webhook-url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          message: |
-            ❌ Build Failed:
-            - Commit: `${{ github.sha }}`
-            - Author: `${{ github.actor }}`
-            - Commit Message: `${{ github.event.head_commit.message }}`
-
-
+      
