@@ -10,17 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Run the build step
-      - name: Build the application
-        run: |
-          echo "Simulating build process..."
-          # Replace the following line with your actual build command
-          npm install && npm run build
-
+    
       # Notify on success
       - name: Send success notification to Discord
         if: ${{ success() }}
