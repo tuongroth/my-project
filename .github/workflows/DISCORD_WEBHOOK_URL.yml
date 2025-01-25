@@ -1,33 +1,15 @@
-name: Notify Discord
+name: Test Discord Webhook
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
 
 jobs:
-  notify:
+  test-webhook:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Notify Discord of Success
-        if: ${{ success() }}
-        uses: ilyasotkov/discord-webhook-notify@v2
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          status: success
-          message: "🎉 Deployment to main was successful!"
+      - name: Send test message to Discord
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"content": "Hello from GitHub Actions! 🎉"}' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Notify Discord of Failure
-        if: ${{ failure() }}
-        uses: ilyasotkov/discord-webhook-notify@v2
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          status: error
-          message: |
-            🚨 Build failed!
-            Commit: ${{ github.event.head_commit.message }}
-            Committer: ${{ github.event.head_commit.author.name }}
-            Branch: ${{ github.ref_name }}
-            Check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
