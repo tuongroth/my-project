@@ -24,11 +24,10 @@ jobs:
       # Notify on success
       - name: Send success notification to Discord
         if: ${{ success() }}
-        uses: Ilshidur/discord-webhook@v2.17.0
+        uses: baptistelebail/discord-webhook@v1.0.1
         with:
-          webhook: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          username: 'CI/CD Bot'
-          message: |
+          url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          content: |
             ✅ **Build Success**
             A new version has been deployed! 🎉
             - Commit: `${{ github.sha }}`
@@ -37,11 +36,10 @@ jobs:
       # Notify on failure
       - name: Send failure notification to Discord
         if: ${{ failure() }}
-        uses: Ilshidur/discord-webhook@v2.17.0
+        uses: baptistelebail/discord-webhook@v1.0.1
         with:
-          webhook: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
-          username: 'CI/CD Bot'
-          message: |
+          url: 'https://discord.com/api/webhooks/1332657400209084427/MQTTsMOWCHI9g5fwMr-wgmHmV2rivAYNvrGGaqeh1vkWRZJWabANdAIk-jJF34SLLmR5'
+          content: |
             ❌ **Build Failed**
             The build process encountered an error. 😞
             - Commit: `${{ github.sha }}`
@@ -49,3 +47,4 @@ jobs:
             - Commit Message: `${{ github.event.head_commit.message }}`
             - Branch: `${{ github.ref_name }}`
             Please investigate this issue.
+
