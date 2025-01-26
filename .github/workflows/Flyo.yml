@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # This triggers the pipeline on a push to the main branch.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Choose a runner for the job.
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+   
+    - name: Deploy to Fly.io
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}  # Use the secret here.
+      run: |
+        curl -fsSL https://fly.io/install.sh | sh  # Install the Fly CLI
+        fly auth token $FLY_API_TOKEN  # Authenticate using the Fly.io token
+        fly deploy  # Deploy your app to Fly.io

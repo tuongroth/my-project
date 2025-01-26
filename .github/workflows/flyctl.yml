@@ -1,0 +1,40 @@
+name: Build Notification
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  notify-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run build
+        run: |
+          echo "Running build process..."
+          # Giả định build sẽ luôn thành công
+          # Bạn có thể thay bằng lệnh thực tế (npm build, etc.)
+
+      - name: Send success notification to Discord
+        if: ${{ success() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"🎉 Build succeeded! Deployed commit: \`${{ github.sha }}\` from branch: \`${{ github.ref_name }}\`\"}" \
+          $DISCORD_WEBHOOK
+
+      - name: Send failure notification to Discord
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"❌ Build failed! Commit: \`${{ github.sha }}\` from branch: \`${{ github.ref_name }}\`. Check logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          $DISCORD_WEBHOOK
+

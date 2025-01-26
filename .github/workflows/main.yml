@@ -1,0 +1,19 @@
+name: Hello World Workflow
+
+on:
+  push:
+    branches:
+      - main  # Triggers workflow when pushing to main
+  workflow_dispatch: # Allows manual triggering from GitHub Actions
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Say Hello
+        run: echo "Hello World!"
+
