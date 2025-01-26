@@ -1,29 +1,43 @@
-// .env should be loaded as the very first thing
-require('dotenv').config();
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/authRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const errorHandler = require("./middleware/errorHandler");
 
-// Import các thư viện và module cần thiết
-const express = require('express');
-const connectDB = require('./config/db');
-const contactRoutes = require('./routes/contactRoutes');
-const errorHandler = require('./middleware/errorHandler');
+dotenv.config(); // Load environment variables from .env file
 
-// Tạo đối tượng Express app
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Middleware để parse JSON request body
-app.use(express.json());
+// Middleware
+app.use(cors());
+app.use(express.json()); // Parse incoming JSON requests
 
-// Kết nối với cơ sở dữ liệu MongoDB
+// MongoDB connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB connected successfully");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1);
+  }
+};
 connectDB();
 
-// Định nghĩa các route API
-app.use('/api/contacts', contactRoutes);
+// Routes
+app.use("/api/auth", authRoutes); // Authentication routes (login, register)
+app.use("/api/contacts", contactRoutes); // Contact management routes
 
-// Xử lý lỗi toàn cục
+// Error handling middleware
 app.use(errorHandler);
 
-// Lắng nghe yêu cầu từ client
-const PORT = process.env.PORT || 5000;
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
