@@ -2,15 +2,13 @@
 
 # **Contact Management System - Backend Setup**
 
-Dưới đây là toàn bộ nội dung hướng dẫn cài đặt backend và các API, viết dưới dạng Markdown:
 
-```markdown
 # Backend Setup Guide
 
 ## Step 1: Clone the Repository
 Clone the project repository to your local machine:
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/your-username/your-repository.git](https://github.com/tuongroth/my-project
 cd your-repository/backend
 ```
 
