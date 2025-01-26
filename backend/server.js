@@ -5,9 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const contactRoutes = require('./routes/contactRoutes');
-const userRoutes = require('./routes/userRoutes'); // Import user routes
 const errorHandler = require('./middleware/errorHandler');
-const authMiddleware = require('./middleware/authMiddleware'); // Middleware for protected routes
 
 // Tạo đối tượng Express app
 const app = express();
@@ -19,8 +17,7 @@ app.use(express.json());
 connectDB();
 
 // Định nghĩa các route API
-app.use('/api/contacts', authMiddleware, contactRoutes); // Protect contact routes
-app.use('/api/users', userRoutes); // Use user routes
+app.use('/api/contacts', contactRoutes);
 
 // Xử lý lỗi toàn cục
 app.use(errorHandler);
