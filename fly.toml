@@ -1,13 +1,22 @@
-[env]
-  PORT = "3000" # add this where PORT matches the internal_port below
+# fly.toml app configuration file generated for my-project-aged-hill-3099 on 2025-01-31T19:50:02+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-[processes]
-  app = "node app.js" # add this
+app = 'my-project-aged-hill-3099'
+primary_region = 'arn'
+
+[build]
 
 [http_service]
-  internal_port = 3000
+  internal_port = 80
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
