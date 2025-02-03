@@ -14,19 +14,18 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy
-        run: ./deploy.sh  # Your deploy script or command
+        run: ./deploy.sh  # Lệnh deploy của bạn (ví dụ: chạy script deploy)
 
       - name: Notify Success
-        if: success()
+        if: success()  # Nếu deploy thành công
         uses: rtCamp/action-discord-webhook@v2
         with:
           webhook_url: https://discord.com/api/webhooks/1336094451512119396/AwGigxBah0CONxfPAfk1EpYFEs6gcKgIhkyfnSjG1pirn_CXN-OHWzal_5AmE8-2lW0w
           message: "Deployment successful: ${{ github.sha }}"
 
       - name: Notify Failure
-        if: failure()
+        if: failure()  # Nếu deploy thất bại
         uses: rtCamp/action-discord-webhook@v2
         with:
           webhook_url: https://discord.com/api/webhooks/1336094451512119396/AwGigxBah0CONxfPAfk1EpYFEs6gcKgIhkyfnSjG1pirn_CXN-OHWzal_5AmE8-2lW0w
           message: "Deployment failed: ${{ github.sha }}"
-
