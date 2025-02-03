@@ -18,14 +18,14 @@ jobs:
 
       - name: Notify Success
         if: success()
-        uses: some/discord-webhook-action@v1
+        uses: Ilshidur/action-discord-webhook@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: "Deployment successful: ${{ github.sha }}"
 
       - name: Notify Failure
         if: failure()
-        uses: some/discord-webhook-action@v1
+        uses: Ilshidur/action-discord-webhook@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: "Deployment failed: ${{ github.sha }}"
