@@ -1,0 +1,35 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main  # hoặc branch mà bạn muốn trigger workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Thêm bước Deploy của bạn tại đây
+      # ...
+
+      - name: Deploy and notify success
+        if: success()  # Kiểm tra nếu bước deploy thành công
+        uses: some/discord-webhook-action@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "Deployment successful: ${{ github.sha }}"
+
+      - name: Deploy and notify failure
+        if: failure()  # Kiểm tra nếu có lỗi trong deploy
+        uses: some/discord-webhook-action@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: |
+            Deployment failed: ${{ github.sha }}
+            Error: ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Details: ${{ github.event.head_commit.message }}
