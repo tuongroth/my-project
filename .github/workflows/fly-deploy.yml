@@ -1,4 +1,17 @@
+name: Simple Push Workflow
+
 on:
   push:
     branches:
       - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run a simple script
+        run: echo "Hello, World!"
