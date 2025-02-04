@@ -11,18 +11,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: ./deploy.sh  # Thay bằng lệnh deploy của bạn
 
       - name: Notify Success
-        if: success()  # Nếu deploy thành công
-        uses: rtCamp/action-discord-webhook@v2
-        with:
-          webhook_url: https://discord.com/api/webhooks/1336094451512119396/AwGigxBah0CONxfPAfk1EpYFEs6gcKgIhkyfnSjG1pirn_CXN-OHWzal_5AmE8-2lW0w
-          message: "Deployment successful: ${{ github.sha }}"
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"content": "🚀 Deployment successful: ${{ github.sha }}"}' \
+          "https://discord.com/api/webhooks/1336217194597580821/DWcrFbkTw0-4UXlE6SzLCAPtOZaCqMX4QajItk03xP-w1XYAySMOEqo86z4ITb5gXQ7r"
 
       - name: Notify Failure
-        if: failure()  # Nếu deploy thất bại
-        uses: rtCamp/action-discord-webhook@v2
-        with:
-          webhook_url: https://discord.com/api/webhooks/1336094451512119396/AwGigxBah0CONxfPAfk1EpYFEs6gcKgIhkyfnSjG1pirn_CXN-OHWzal_5AmE8-2lW0w
-          message: "Deployment failed: ${{ github.sha }}"
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"content": "❌ Deployment failed: ${{ github.sha }}"}' \
+          "https://discord.com/api/webhooks/1336217194597580821/DWcrFbkTw0-4UXlE6SzLCAPtOZaCqMX4QajItk03xP-w1XYAySMOEqo86z4ITb5gXQ7r"
