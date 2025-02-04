@@ -11,10 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy
-        run: ./deploy.sh  # Lệnh deploy của bạn (ví dụ: chạy script deploy)
+        uses: actions/checkout@v
 
       - name: Notify Success
         if: success()  # Nếu deploy thành công
