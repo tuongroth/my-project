@@ -33,7 +33,7 @@
     "globals": "^15.14.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.19.1",
-    "vite": "^6.0.9"
+    "vite": "^6.2.3"
   },
   "description": "Clone the project repository to your local machine:\r ```bash\r git clone https://github.com/your-username/your-repository.git](https://github.com/tuongroth/my-project\r cd your-repository/backend\r ```",
   "main": "eslint.config.js",
